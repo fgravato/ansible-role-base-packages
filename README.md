@@ -1,69 +1,121 @@
-base-packages
-=============
+# base-packages
 
 [![Build Status](https://travis-ci.org/infOpen/ansible-role-base-packages.svg?branch=master)](https://travis-ci.org/infOpen/ansible-role-base-packages)
 
-Install base packages on servers.
+Install base-packages package.
 
-Requirements
-------------
+## Requirements
 
-This role requires Ansible 1.5 or higher, and platform requirements are listed
-in the metadata file.
+This role requires Ansible 2.0 or higher,
+and platform requirements are listed in the metadata file.
 
-Role Variables
---------------
+## Testing
 
-Default role variables
+This role use [Molecule](https://github.com/metacloud/molecule/) to run tests.
 
+Locally, you can run tests on Docker (default driver) or Vagrant.
+Travis run tests using Docker driver only.
 
-    # Defaults file for base-packages
-    base_packages_simples_list : []
+Currently, tests are done on:
+- Debian Jessie
+- Ubuntu Trusty
+- Ubuntu Xenial
 
-Specific debian variables
+and use:
+- Ansible 2.0.x
+- Ansible 2.1.x
+- Ansible 2.2.x
+- Ansible 2.3.x
 
-    # Debian specific vars
-    base_packages_simples_list :
-      - sysstat           # Used to monitor system stats
-      - vim               # Because loving color ;)
-      - cron-apt          # To keep an package database updated
-      - debian-goodies    # Provide checkrestart
-      - nagios-plugins    # Usefull monitoring scripts
-      - tree              # A tree view of directory
-      - htop              # top ehanced
-      - iotop             # Top for i/o
-      - iftop             # Top for netword traffic
-      - di                # Better than df
-      - dstat             # iotop/vmstat/iftop in a same tool
-      - mtr               # To complete traceroute
-      - molly-guard       # Not reboot by accident
-      - git               # Versionning
-      - curl              # Get files from internet or check url
-      - rssh              # To used restricted shell
-      - sshfs             # Used to mount fs by ssh
-      - acl               # Useful for extended permissions on fs
+### Running tests
 
+#### Using Docker driver
 
+```
+$ tox
+```
 
-Dependencies
-------------
+#### Using Vagrant driver
+
+```
+$ MOLECULE_DRIVER=vagrant tox
+```
+
+## Role Variables
+
+If a package must removed, add `state` key with 'absent' value.
+
+### Default role variables
+
+```yaml
+base_packages_items: "{{ _base_packages_items }}"
+base_packages_repository_cache_valid_time: 3600
+```
+
+### Specific Debian family variables
+
+```yaml
+_base_packages_items:
+  - name: 'acl'
+  - name: 'curl'
+  - name: 'dstat'
+  - name: 'git'
+  - name: 'htop'
+  - name: 'iftop'
+  - name: 'iotop'
+  - name: 'mtr'
+  - name: 'rssh'
+  - name: 'sshfs'
+  - name: 'sysstat'
+  - name: 'tree'
+  - name: 'vim'
+  - name: 'cron-apt'
+  - name: 'debian-goodies'
+  - name: 'di'
+  - name: 'molly-guard'
+  - name: 'nagios-plugins'
+  - name: 'nagios-plugins-contrib'
+```
+
+### Specific RedHat family variables
+
+```yaml
+_base_packages_items:
+  - name: 'acl'
+  - name: 'curl'
+  - name: 'dstat'
+  - name: 'git'
+  - name: 'htop'
+  - name: 'iftop'
+  - name: 'iotop'
+  - name: 'mtr'
+  - name: 'rssh'
+  - name: 'sshfs'
+  - name: 'sysstat'
+  - name: 'tree'
+  - name: 'vim'
+  - name: 'nagios-plugins-all'
+  - name: 'yum-cron'
+  - name: 'yum-utils'
+```
+
+## Dependencies
 
 None
 
-Example Playbook
-----------------
+## Example Playbook
 
-    - hosts: servers
-      roles:
-         - { role: achaussier.base-packages }
+``` yaml
+- hosts: servers
+  roles:
+    - { role: infOpen.base-packages }
+```
 
-License
--------
+## License
 
 MIT
 
-Author Information
-------------------
+## Author Information
 
 Alexandre Chaussier (for Infopen company)
 - http://www.infopen.pro

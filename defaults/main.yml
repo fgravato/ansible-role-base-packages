@@ -1,4 +1,6 @@
 ---
 
-# Defaults file for base-packages
-base_packages_simples_list : []
+# Defaults vars file for base-packages role
+
+base_packages_items: "{{ _base_packages_items }}"
+base_packages_repository_cache_valid_time: 3600

@@ -1,21 +1,18 @@
 ---
 
-# Tasks file for base-packages
+# Main tasks file for base-packages role
 
-- name: Load the OS specific varibles
-  include_vars: "{{ role_path }}/vars/{{ ansible_os_family }}.yml"
-
-
-- include: install_debian.yml
+- name: 'INIT | Manage variables to use for our target'
+  include: "{{ role_path }}/tasks/manage_variables.yml"
   tags:
-    - install
-  when: ansible_os_family == "Debian"
+    - 'role::base-packages'
+    - 'role::base-packages::init'
+    - 'role::base-packages::install'
 
 
-- name : Create root crontab scripts directory
-  file :
-    path  : /root/crontab-scripts
-    group : root
-    owner : root
-    state : directory
-    mode  : 0750
+- name: 'INSTALL | OS families install tasks'
+  include: "{{ role_path }}/tasks/install/{{ ansible_os_family | lower }}_family.yml"
+  become: True
+  tags:
+    - 'role::base-packages'
+    - 'role::base-packages::install'
